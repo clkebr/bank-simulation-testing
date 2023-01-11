@@ -83,7 +83,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     private boolean checkSenderBalance(AccountDTO sender, BigDecimal amount) {
-        return accountService.retrieveById(sender.getId()).getBalance().subtract(amount).compareTo(BigDecimal.ZERO) > 0;
+        return accountService.retrieveById(sender.getId()).getBalance().subtract(amount).compareTo(BigDecimal.ZERO) >= 0;
     }
 
     private void validateAccounts(AccountDTO sender, AccountDTO receiver) {
@@ -93,7 +93,7 @@ public class TransactionServiceImpl implements TransactionService {
         }
 
         if (sender.getId().equals(receiver.getId())) {
-            throw new BadRequestException("Sender account needs to be different from recaiver account");
+            throw new BadRequestException("Sender account needs to be different from receiver account");
         }
 
         if (sender.getAccountStatus().equals(AccountStatus.DELETED)) {
@@ -116,7 +116,7 @@ public class TransactionServiceImpl implements TransactionService {
         if ((sender.getAccountType().equals(AccountType.SAVINGS) ||
                 receiver.getAccountType().equals(AccountType.SAVINGS))
                 && !sender.getUserId().equals(receiver.getUserId())) {
-            throw new AccountOwnerShipException("When one of the account type is SAVINGS, sender and receiver has tobe same person");
+            throw new AccountOwnerShipException("When one of the account type is SAVINGS, sender and receiver has to be same person");
         }
 
     }
